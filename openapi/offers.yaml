@@ -1,0 +1,645 @@
+openapi: '3.0.2'
+info:
+  title: Offers Service
+  version: '1.0'
+  description: Provides a set of API operations that can be performed on shopping stores.
+  license:
+    name: Proximety
+    url: www.proximety.io
+servers:
+  - url: https://dev.proximety.io/api
+  - url: https://staging.proximety.io/api
+  - url: https://www.proximety.io/api
+tags:
+# - name: User
+# - name: Issue Ticket
+paths:
+  /offers/_search:
+    post: 
+      tags:
+        - Search
+      summary: Get offers
+      description: Retrieves a list of offers based on the specified search criteria.
+      operationId: getOffers
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string    
+      requestBody:
+        description: The details of the store that needs to be added.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfferSearchRequest'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferSearchResponse'
+        "400":
+          description: Bad request          
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 400,
+                  "type": "BAD_REQUEST",
+                  "title": "Mandatory fields missing from request.",
+                  "detail": "No mall specified for the store. Please specify a mall id for the store and try again.",
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                }
+  /offers:
+    post: 
+      tags:
+        - Offers
+      summary: Create offer
+      description: Creates a new offer/ad in the platform.
+      operationId: createOffer
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string    
+      requestBody:
+        description: The details of the offer that needs to be added.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfferDetails'
+            example: {
+                    "offerTitle": "Indigo Nation - Buy 2 Get 2 filtered.",
+                    "ownerDetails": {
+                      "ownerId": "88d899132",
+                      "ownerType": "STORE",
+                      "ownerName": "Allen Solly"
+                    },
+                    "offerCategory": "SHOPPING",
+                    "couponCode": "WELCOME500",
+                    "startDate": "2022-05-17",
+                    "endDate": "2022-05-17",
+                    "termsAndConditions": "1. This voucher is valid until 6 months from the date of issuance. /n 2. This voucher is redeemable only at the HiLite group of malls."
+                  }
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferDetails'
+        "400":
+          description: Bad request          
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 400,
+                  "type": "BAD_REQUEST",
+                  "title": "Mandatory fields missing from request.",
+                  "detail": "No title specified for the offer. Please specify a title for the offer and try again.",
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                }
+  /offers/{offerId}:
+    get: 
+      tags:
+        - Offers
+      summary: Get offer
+      description: Retrieves a specific offer existing in the platform.
+      operationId: getOffer
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string    
+        - name: offerId
+          in: path
+          description: The internal system identifier for the offer whose details are to be fetched.
+          required: true
+          example: h929d1
+          schema: 
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferDetails'
+        "400":
+          description: Bad request          
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 400,
+                  "type": "BAD_REQUEST",
+                  "title": "Mandatory fields missing from request.",
+                  "detail": "No title specified for the offer. Please specify a title for the offer and try again.",
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                }
+    put: 
+      tags:
+        - Offers
+      summary: Update offer
+      description: Updates the details of an existing offer/ad in the platform.
+      operationId: updateOffer
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string    
+        - name: offerId
+          in: path
+          description: The internal system identifier for the offer whose details are to be updated.
+          required: true
+          example: h929d1
+          schema: 
+            type: string
+      requestBody:
+        description: The details of the offer that needs to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfferDetails'
+            example: {
+                    "offerTitle": "Indigo Nation - Buy 2 Get 2 filtered.",
+                    "ownerDetails": {
+                      "ownerId": "88d899132",
+                      "ownerType": "STORE",
+                      "ownerName": "Allen Solly"
+                    },
+                    "offerCategory": "SHOPPING",
+                    "couponCode": "WELCOME500",
+                    "startDate": "2022-05-17",
+                    "endDate": "2022-05-17",
+                    "termsAndConditions": "1. This voucher is valid until 6 months from the date of issuance. /n 2. This voucher is redeemable only at the HiLite group of malls."
+                  }
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferDetails'
+        "400":
+          description: Bad request          
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 400,
+                  "type": "BAD_REQUEST",
+                  "title": "Mandatory fields missing from request.",
+                  "detail": "No title specified for the offer. Please specify a title for the offer and try again.",
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                }
+    delete: 
+      tags:
+        - Offers
+      summary: Delete offer
+      description: Deletes the specified offer from the platform.
+      operationId: deleteOffer
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string
+        - name: offerId
+          in: path
+          required: true
+          description: The internal system identifier for the offer that needs to be deleted.
+          schema:
+            type: string       
+      responses:
+        "200":
+          description: Successful operation
+        "404":
+          description: Not found         
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 404,
+                  "type": "NOT_FOUND",
+                  "title": "Offer not found",
+                  "detail": "No offer found for the specified offer id. Please specify a valid offer id and try again.",
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                } 
+  /offers/{offerId}/banner-image:
+    put: 
+      summary: Update banner image
+      description: Updates the banner image for the specified offer.
+      tags:
+        - "Images"
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string    
+        - name: offerId
+          in: path
+          description: The internal system identifier for the offer whose banner image needs to be updated.
+          required: true
+          example: h929d1
+          schema: 
+            type: string
+      requestBody:
+        description: The request body for updating the banner image for an offer.
+        required: true
+        content:
+          image/png:
+            schema:
+              type: string
+              format: binary
+          image/jpg:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bannerUrl:
+                    type: string
+                    example: https://picsum.photos/id/237/200/300.jpg
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "BAD_REQUEST",
+                  "title": "Unsupported image format.",
+                  "detail": "The specified image format is not supported. Please specify a .png or .jpg file and try again.",
+                  "tags":[]
+                }
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "NOT_FOUND",
+                  "title": "Offer not found",
+                  "detail": "No offer found for the specified offer id.",
+                  "tags":[]
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                }
+components:
+  schemas:
+    OfferDetails: 
+      type: object
+      description: The details of an ad/offer running in te platform.
+      required:
+        - offerTitle
+        - ownerDetails
+        - offerCategory
+      properties:
+        offerId: 
+          type: string
+          description: The internal system identifier for the offer.
+          example: h929d1
+        offerTitle:
+          type: string
+          description: The title for the offer being run by the store. 
+          example: Indigo Nation - Buy 2 Get 2 filtered.
+        ownerDetails:
+          type: object
+          description: The details of the store/brand for which the offer is being created.
+          $ref: '#/components/schemas/OwnerDetails'
+        offerCategory:
+          type: string
+          description: The offer category.
+          example: SHOPPING
+          enum: 
+          - SHOPPING
+        couponCode:
+          type: string
+          description: The coupon code associated with the offer.
+          example: WELCOME500
+        startDate:
+          type: string
+          description: The offer start database.
+          example: "2022-05-17"
+        endDate:
+          type: string
+          description: The offer end database.
+          example: "2022-05-17"
+        bannerUrl: 
+          type: string
+          description: The URL to access the offer banner image.
+          example:  https://dev.proximety.io/images/21423.jpg
+        termsAndConditions:
+          type: string
+          description: The terms and conditions associated with the offer.
+          example: 1. This voucher is valid until 6 months from the date of issuance. /n
+                  2. This voucher is redeemable only at the HiLite group of malls. 
+        links:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Link'
+          example: [
+                    {
+                      "rel": "self",
+                      "href": "http://dev.proximety.io/api/offers/abruishj293jjs"
+                    }
+                  ]
+
+    OfferSearchRequest:
+      type: object
+      description: The search filters based on which a list of offers are to be retrieved.
+      properties:
+        query: 
+          type: string
+          description: The search string based on which results need to be fetched.
+          example: adi
+        # mallId:
+        #   type: string
+        #   description: The internal system identifier for the shopping malls whose stores are to be retrieved.
+        #   example: 1d4122
+        status:
+          type: string
+          description: The status of the offer.
+          example: ACTIVE
+          enum:
+            - ACTIVE
+            - EXPIRED
+            - UPCOMING
+        offerCategories:
+          type: array
+          items:
+            type: string
+            description: The offer category.
+            example: SHOPPING
+            enum: 
+            - SHOPPING
+          example: [SHOPPING]
+        offset:
+          type: integer
+          description: The search offset for doing paginated search.
+          example: 20
+          default: 0
+        limit: 
+          type: integer
+          description: The page size for doing paginated search
+          example: 10
+          default: 10
+    OfferSearchResponse:
+      type: object
+      description: The store search response that contains the list of stores matching the search criteria.
+      properties:
+        count: 
+          type: integer
+          description: The count of stores returned in the search response.
+          example: 10
+        total: 
+          type: integer
+          description: The total number of stores that match the specified search criteria.
+        _embedded:
+          type: object
+          description: The embedded search results
+          properties:
+            offers:
+              type: array
+              description: The list of stores matching the specified search criteria.
+              items:
+                $ref: '#/components/schemas/Offer'
+    OwnerDetails: 
+      type: object
+      properties:
+        ownerId: 
+          type: string
+          description: The internal system identifier for the owner.
+          example: 88d899132
+        ownerType:
+          type: string
+          description: The type of owner.
+          example: STORE 
+          enum:
+            - STORE
+        ownerName:
+          type: string
+          description: The display name for the owner.
+          example: Allen Solly
+        links:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Link'
+          example: [
+                    {
+                      "rel": "self",
+                      "href": "http://dev.proximety.io/api/stores/88d899132"
+                    }
+                  ]
+    Offer:
+      type: object
+      description: The summary of an offer run by a store.
+      properties:
+        offerId: 
+          type: string
+          description: The internal system identifier for the offer.
+          example: h929d1
+        offerTitle:
+          type: string
+          description: The title for the offer being run by the store. 
+          example: Indigo Nation - Buy 2 Get 2 filtered.
+        ownerDetails:
+          type: object
+          description: The details of the store/brand for which the offer is being created.
+          $ref: '#/components/schemas/OwnerDetails'
+        offerCategory:
+          type: string
+          description: The offer category.
+          example: SHOPPING
+          enum: 
+          - SHOPPING
+        status:
+          type: string
+          description: The current status of the offer.
+          example: ACTIVE
+          enum:
+            - ACTIVE
+            - EXPIRED
+            - UPCOMING
+            - PENDING_APPROVAL
+            - DECLINED
+        startDate:
+          type: string
+          description: The offer start database.
+          example: "2022-05-17"
+        endDate:
+          type: string
+          description: The offer end database.
+          example: "2022-05-17"
+        offerBannerUrl: 
+          type: string
+          description: The URL to access the offer banner image.
+          example:  https://dev.proximety.io/images/21423.jpg
+        links:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Link'
+          example: [
+                    {
+                      "rel": "self",
+                      "href": "http://dev.proximety.io/api/offers/abruishj293jjs"
+                    }
+                  ]
+    Link: 
+      type: object
+      description: A link relationship.
+      properties:
+        rel:
+          type: string
+          example: self 
+        href:
+          type: string
+          description: The URL link to the resource.
+          example: http://dev.proximety.io/api/offers/abruishj293jjs
+    GlobalException:
+      type: object
+      description: An exception thrown by the system.
+      properties:
+        status:
+          type: integer
+          description: The status code for the error.
+          example: 401
+        type:
+          type: string
+          description: The type name for the error being thrown.
+          example: UNAUTHORIZED
+        title:
+          type: string
+          description: The error title.
+          example: Token expired.
+        detail:
+          type: string
+          description: The details of the error being thrown.
+          example: The access token has expired for the user. Please generate a new token and try again.
+        tags:
+          type: array
+          description: The varios tags associated with the error that provides additional information about the error.
+          items: 
+            type: string
+            example: ACCESS_TOKEN_INVALID

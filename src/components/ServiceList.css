@@ -1,0 +1,94 @@
+
+.select_style{
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  }
+
+.MuiDataGrid-columnHeadersInner, .MuiDataGrid-columnHeaders{
+    font-size: large;
+    background-color: rgb(24, 24, 51);
+    color: rgb(255, 255, 255);
+}
+
+.MuiDataGrid-virtualScrollerRenderZone{
+    font-size: medium;
+    color: black;
+}
+
+
+.rapidoc{
+  width: 100%;
+  height: 100%;
+}
+rapi-doc{
+  height: 94%;
+  overflow:scroll;
+}
+.servicesList{
+  height: 38rem;
+  width: 60%;
+  background-color: rgb(255, 255, 255);
+  height: 100%;
+}
+
+.pageTitle{
+  color: rgb(53, 53, 92);
+  background-color: white;
+  width: 100%;
+  height: 2.8rem;
+  font-weight: 600;
+  font-size: larger;
+  
+}
+
+
+.css-319lph-ValueContainer{
+  background-color: #323334;
+}
+.css-b62m3t-container{
+  width: 450px;
+  height: 6%;
+}
+.css-qc6sy-singleValue{
+  color: white !important;
+  font-size: medium;
+}
+/* #react-select-3-listbox{
+  background-color: #475757;
+  margin-top: -7px;
+  opacity: 100%;
+}
+#react-select-3-listbox div{
+  color: white;
+} */
+.css-1n7v3ny-option{
+  color: black !important;
+  font-weight: 600;
+  background-color: #DEEBFF !important;
+}
+.css-4ljt47-MenuList div{
+  width: 450px;
+  height: 30px;
+  font-size: medium;
+  padding: 0;
+}
+.init_mode{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.select_style div:first-child{
+  background-color: #323334;
+  opacity: 100%;
+}
+
+.select_style div[id^=react-select]{
+  background-color: #475757;
+  color: white;
+  height: 2rem;
+  font-size: medium;
+}

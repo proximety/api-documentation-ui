@@ -1,0 +1,502 @@
+openapi: '3.0.2'
+info:
+  title: Movie Booking Service
+  version: '1.0'
+  description: Provides a set of API operations that can be used for viewing movie details and for booking movie tickets.
+  license:
+    name: Proximety
+    url: www.proximety.io
+servers:
+  - url: https://dev.proximety.io/api
+  - url: https://staging.proximety.io/api
+  - url: https://proximety.io/api
+paths:
+  /movies:
+    get: 
+      tags:
+        - Movies
+      summary: List movies
+      description: API to get the list of all movies.
+      operationId: getMovies
+      # parameters:
+      #   - name: mallId
+      #     in: query
+      #     description: Internal system identifier for the mall.
+      #     required: true
+      #     schema:
+      #       type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieSummary'
+        "400":
+          description: Bad request
+        "403":
+          description: Unauthorized access
+  /movies/{id}:
+    get: 
+      tags:
+        - Movies
+      summary: Movie details
+      description: Retrieves the details of a movie.
+      operationId: getMovie
+      parameters:
+        - name: id
+          in: path
+          description: The internal system identifier for the movie.
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/MovieDetails'
+        "400":
+          description: Bad request
+        "403":
+          description: Unauthorized access
+  /movie-options/{optionId}/schedule:
+    get:
+      tags:
+        - Movie Schedule
+      summary: Movie schedule
+      description: Retrieves the schedule of a given movie option.
+      operationId: getSchedule
+      # parameters:
+      #   - name: mallId
+      #     in: query
+      #     description: The internal system identifier for the mall.
+      #     required: true
+      #     schema:
+      #       type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schedule'
+        "400":
+          description: Bad request
+        "403":
+          description: Unauthorized access
+  /movie-schedules/{scheduleId}/seat-layout:
+    get:
+      tags:
+        - Movie Seating
+      summary: Seating details
+      description: Retrieves the seat layout of a screen.
+      operationId: getSeatLayout
+      parameters:
+        - name: scheduleId
+          in: path
+          description: The internal system identifier for a movie schedule.
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SeatDetails'
+        "400":
+          description: Bad request
+        "403":
+          description: Unauthorized access
+  /movie-schedules/{scheduleId}/orders:
+     post:
+      tags:
+        - Movie Orders
+      summary: Create ticket order
+      description: Creates a new movie ticket order for the specified schedule.
+      operationId: createMovieOrder
+      parameters:
+        - name: scheduleId
+          in: path
+          description: The internal system identifier for a movie schedule.
+          required: true
+          schema:
+            type: string
+            example: 123
+      requestBody:
+        description: The request body creating a new movie ticket order.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketOrder'
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderDetails'
+        "400":
+          description: Bad request
+        "403":
+          description: Unauthorized access
+  /movie-orders/{orderId}:
+    put:
+      tags:
+        - Movie Orders
+      summary: Update Order
+      description: Updates the details of a movie ticket order.
+      operationId: updateOrder
+      parameters:
+        - name: orderId
+          in: path
+          description: The internal system identifier of an order.
+          required: true
+          schema:
+            type: string
+            example: 12ed432
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderDetails'
+        "400":
+          description: Bad request
+        "403":
+          description: Unauthorized access
+    get:
+      tags:
+        - Movie Orders
+      summary: Retrieves the details of an order.
+      operationId: orderDetails
+      parameters:
+        - name: orderId
+          in: path
+          description: The internal system identifier of an order.
+          required: true
+          schema:
+            type: string
+            example: 12ed432
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderDetails'
+        "400":
+          description: Bad request
+        "403":
+          description: Unauthorized access
+      
+components:
+  schemas:
+    TicketOrder:
+      type: object
+      properties:       
+        status:
+          type: string
+          description: The status of the movie ticket order.
+          example: BLOCKED
+          enum:
+            - BLOCKED
+            - CONFIRMED
+        seatIds: 
+          type: array
+          items:
+            type: integer
+            example: 21
+          example: [123,412]
+    MovieSummary:
+      type: object
+      required:
+        - id
+        - movieName
+        - releaseDate
+      properties:
+        id:
+          type: integer
+          description: The internal system identifier for a movie.
+          example: 123
+        movieName:
+          type: string
+          description: Name of the movie.
+          example: Kaduva
+        genre:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+          description: Genre of the movie.  
+        releaseDate:
+          type: string
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2022-05-17"
+        posterUrl:
+          type: string
+          format: uri
+          description: url of the poster
+          example: https://dev.proximety.io/api/movies/eahdjk14129102==
+        bookingOpen:
+          type: boolean
+          description: To indicate if booking is open for the movie.
+        hasPremiumExperience:
+          type: boolean
+          description: Is premium experience available for the movie.       
+    MovieDetails:
+      type: object
+      required:
+        - movieName
+      properties:
+        id:
+          type: integer
+          description: The internal system identifier for a movie.
+          example: 123
+        movieName:
+          type: string
+          description: Name of the movie.
+          example: Kaduva
+        genre:
+          type: array
+          description: Genre of the movie.
+          items:
+            $ref: '#/components/schemas/Genre'
+        releaseDate:
+          type: string
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2022-05-17"
+        posterUrl:
+          type: string
+          format: uri
+          description: url of the poster
+          example: https://dev.proximety.io/api/movies/eahdjk14129102==
+        trailers:
+          type: array
+          description: List of movie trailers.
+          items:
+            $ref: '#/components/schemas/Trailer'
+        duration:
+          type: integer
+          description: Duration of the movie in minutes.
+          example: 150
+        overview:
+          type: string
+          description: Overview of the movie
+        hasPremiumExperience:
+          type: boolean
+          description: Is premium experience available for the movie.
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Options'
+        certificate:
+          type: string
+          description: Certificate of the movie
+          enum:
+            - U
+            - A
+            - U/A
+        director:
+          type: string
+          description: Name of the director
+        writer:
+          type: string
+          description: Name of the writer
+        cast:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cast'
+    Schedule:
+      type: object
+      required:
+        - scheduleId
+        - optionId
+      properties:
+        scheduleId:
+          type: integer
+          description: The internal system identifier for the schedule.
+          example: 422
+        optionId:
+          type: integer
+          description: The internal system identifier for the movie.
+          example: 123
+        movieId:
+          type: integer
+          description: The internal system identifier for the movie in the movie database.
+          example: 123
+        showDate:
+          type: string
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2022-05-17"
+        startTime:
+          type: string
+          description: Start time of the show
+          example: 17:30
+        saleStatus:
+          type: string
+          enum: 
+            - SOLDOUT
+            - AVAILABLE
+    OrderDetails:
+      type: object
+      properties:
+        orderId: 
+          type: string
+          description: Internal system identifier for order
+          example: aa73819jd
+        totalAmount:
+          type: string
+          description: Total amount for the order
+          example: "600"
+        movieName:
+          type: string
+          description: Name of the movie.
+          example: Kaduva
+        date:
+          type: string
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2022-05-17"
+        time:
+          type: string
+          example: "17:30"
+        status:
+          type: string
+          example: BLOCKED
+          enum:
+            - SUCCESS
+            - PENDING
+            - BLOCKED
+        seats:
+          type: array
+          items:
+            $ref: '#/components/schemas/Seat'
+    
+    Cast: 
+      type: object
+      properties:
+        originalName: 
+          type: string
+          description: Name of the actor/actress
+        character:
+          type: string
+          description: Name of the character in the movie
+        profileImageUrl:
+          type: string
+          format: uri
+          description: url of the path in which cast image is stored
+    Trailer:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Unique identifier for the trailer video
+          example: 6JnN1DmbqoU
+        site:
+          type: string
+          description: Name of the website in which the video is available
+          example: YouTube
+    Genre:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Action
+    SeatClass:
+      type: object
+      description: The class detaisl for a seat.
+      properties:
+        id: 
+          type: integer
+          example: 1
+          description: The internal system identifier for the seat class.
+        name: 
+          type: string
+          description: The display name for the seat class.
+          example: Recliner
+    SeatDetails:
+      type: object
+      properties:
+        class: 
+          type: object
+          $ref: "#/components/schemas/SeatClass"
+        seatId:
+          type: integer
+          example: 1
+          description: Internal system identifier for the seat.
+        seatName:
+          type: string
+          example: A1
+          description: Name of the seat.
+        rowId:
+          type: integer
+          example: 1
+          description: Internal system identifier for the seat row.
+        isSeat:
+          type: boolean
+          example: true
+        available:
+          type: boolean
+          example: true
+          description: Availability of seat.
+        reservationRate:
+          type: number
+          pattern: /([0-9]*\.[0-9]{2})/
+          example: 20.05
+          description: Reservation rate for the seat
+        3dRate:
+          type: number
+          pattern: /([0-9]*\.[0-9]{2})/
+          example: 30.50
+          description: 3d rate for the seat
+        ticketRate:
+          type: number
+          pattern: /([0-9]*\.[0-9]{2})/
+          example: 300.05
+          description: Ticket rate for the seat
+    Options:
+      type: object
+      properties:
+        language:
+          type: string
+          example: malayalam
+        3d:
+          type: boolean
+        optionId:
+          type: integer
+          description: The internal system identifier for a movie.
+          example: 1123
+        premiumExperience:
+          type: boolean
+          description: Is premium experience available for the movie option.
+    Seat:
+      type: object
+      properties:
+        seatId:
+          type: integer
+          example: 1
+          description: Internal system identifier for the seat.
+        seatName:
+          type: string
+          example: A1
+          description: Name of the seat.
+    
+
+          

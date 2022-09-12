@@ -1,0 +1,866 @@
+openapi: '3.0.2'
+info:
+  title: Stores Service
+  version: '1.0'
+  description: Provides a set of API operations that can be performed on shopping stores.
+  license:
+    name: Proximety
+    url: www.proximety.io
+servers:
+  - url: https://dev.proximety.io/api
+  - url: https://staging.proximety.io/api
+  - url: https://www.proximety.io/api
+tags:
+- name: Stores
+# - name: User
+# - name: Issue Ticket
+paths:
+  /stores:
+    post: 
+      tags:
+        - Stores
+      summary: Add new store.
+      description: Adds a new store and its basic attributes to the platform.
+      operationId: addStore
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string    
+      requestBody:
+        description: The details of the store that needs to be added.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreDetails'
+            example: {
+                  "name": "Allen Solly Junior",
+                  "description": "Allen Solly Junior is a fashion brand that provides best in class fashion solutions.",
+                  "ownerName": "David James",
+                  # "mallId": "ajdhus72194a",
+                  "phoneNumbers": [
+                    {
+                      "countryCode": "+91",
+                      "phoneNumber": 0
+                    }
+                  ],
+                  "primaryEmail": "abc@xyz.com",
+                  "location": {
+                    "floorId": "aadjwinfinmkksk312"
+                  },
+                  "categories": [
+                    "APPAREL",
+                    "SHOES"
+                  ],
+                  "storeSizeInSqFt": 250,
+                  "brandsAvailable": "Nike, Adidas",
+                  "storeTimings": {
+                    "openingTime": "10:00",
+                    "closingTime": "21:00"
+                  }
+                }
+        required: true
+        
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreDetails'
+        "400":
+          description: Bad request          
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 400,
+                  "type": "BAD_REQUEST",
+                  "title": "Mandatory fields missing from request.",
+                  "detail": "No mall specified for the store. Please specify a mall id for the store and try again.",
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                }
+  /stores/{storeId}:
+    get: 
+      tags:
+        - Stores
+      summary: Get store details
+      description: Retreives the basic details of a store.
+      operationId: getStore
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string
+        - name: storeId
+          in: path
+          required: true
+          description: The internal system identifier for the store whose details are to be fetched.
+          schema:
+            type: string       
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreDetails'
+        "404":
+          description: Not found         
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 404,
+                  "type": "NOT_FOUND",
+                  "title": "Store not found",
+                  "detail": "No store found for the specified store id. Please specify a valid store id and try again.",
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                }
+    put: 
+      tags:
+        - Stores
+      summary: Update store details.
+      description: Updates the basic details of a store already existing in the platform. 
+      operationId: updateStore
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string
+        - name: storeId
+          in: path
+          required: true
+          description: The internal system identifier for the store whose details are to be fetched.
+          schema:
+            type: string       
+      requestBody:
+        description: The details of the store that needs to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreDetails'
+            example: {
+                  "name": "Allen Solly Junior",
+                  "description": "Allen Solly Junior is a fashion brand that provides best in class fashion solutions.",
+                  "ownerName": "David James",
+                  # "mallId": "ajdhus72194a",
+                  "phoneNumbers": [
+                    {
+                      "countryCode": "+91",
+                      "phoneNumber": 0
+                    }
+                  ],
+                  "primaryEmail": "abc@xyz.com",
+                  "location": {
+                    "floorId": "aadjwinfinmkksk312"
+                  },
+                  "categories": [
+                    "APPAREL",
+                    "SHOES"
+                  ],
+                  "storeSizeInSqFt": 250,
+                  "brandsAvailable": "Nike, Adidas",
+                  "storeTimings": {
+                    "openingTime": "10:00",
+                    "closingTime": "21:00"
+                  }
+                }
+        required: true    
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreDetails'
+        "400":
+          description: Bad request          
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 400,
+                  "type": "BAD_REQUEST",
+                  "title": "Mandatory fields missing from request.",
+                  "detail": "No mall specified for the store. Please specify a mall id for the store and try again.",
+                }
+        "404":
+          description: Not found         
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 404,
+                  "type": "NOT_FOUND",
+                  "title": "Store not found",
+                  "detail": "No store found for the specified store id. Please specify a valid store id and try again.",
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                }
+    delete: 
+      tags:
+        - Stores
+      summary: Delete store
+      description: Deletes the specified store from the platform.
+      operationId: deleteStore
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string
+        - name: storeId
+          in: path
+          required: true
+          description: The internal system identifier for the offer that needs to be deleted.
+          schema:
+            type: string       
+      responses:
+        "200":
+          description: Successful operation
+        "404":
+          description: Not found         
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 404,
+                  "type": "NOT_FOUND",
+                  "title": "Store not found",
+                  "detail": "No store found for the specified store id. Please specify a valid store id and try again.",
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                }
+  /stores/{storeId}/brand-logo:
+    put:
+      tags:
+        - Images
+      summary: Update brand logo.
+      description: Updates the brand logo image for the specified store.
+      operationId: updateBrandLogo
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string
+        - name: storeId
+          in: path
+          description: The internal system handle of the store whose brand logo image needs to be updated.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The request body for updating the brand logo for a store.
+        required: true
+        content:
+          image/png:
+            schema:
+              type: string
+              format: binary
+          image/jpg:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  imageUrl:
+                    type: string
+                    example: https://picsum.photos/id/237/200/300.jpg
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "BAD_REQUEST",
+                  "title": "Unsupported image format.",
+                  "detail": "The specified image format is not supported. Please specify a .png or .jpg file and try again.",
+                  "tags":[]
+                }
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "NOT_FOUND",
+                  "title": "Store not found",
+                  "detail": "No store found for the specified store id.",
+                  "tags":[]
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                }
+  /stores/_search:
+    post: 
+      tags:
+        - "Store Search"
+      summary: Search stores.
+      description: Retrieves a paginated list of stores based on the specified search criteria.
+      operationId: searchStores
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string
+      requestBody:
+        description: The search criteria and filters based on which a list of stored are to be retrieved.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/StoreSearchRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/StoreSearchResponse'
+  /stores/{storeId}/store-image:
+    put:
+      tags:
+        - Images
+      summary: Update store image.
+      description: Updates the store image for the specified store.
+      operationId: updateStoreImage
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string
+        - name: storeId
+          in: path
+          description: The internal system handle of the store whose store image needs to be updated.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The request body for updating the store image.
+        required: true
+        content:
+          image/png:
+            schema:
+              type: string
+              format: binary
+          image/jpg:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  imageUrl:
+                    type: string
+                    example: https://picsum.photos/id/237/200/300.jpg
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "BAD_REQUEST",
+                  "title": "Unsupported image format.",
+                  "detail": "The specified image format is not supported. Please specify a .png or .jpg file and try again.",
+                  "tags":[]
+                }
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "NOT_FOUND",
+                  "title": "Store not found",
+                  "detail": "No store found for the specified store id.",
+                  "tags":[]
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                }
+  /stores/{storeId}/offers:
+    get: 
+      tags:
+        - "Offers"
+      summary: Get store offers
+      description: Retreives the list of offers currently run by the store.
+      operationId: getOffersByStore
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string
+        - name: storeId
+          in: path
+          required: true
+          description: The internal system identifier for the store whose details are to be fetched.
+          schema:
+            type: string       
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreOffers'
+        "404":
+          description: Not found         
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 404,
+                  "type": "NOT_FOUND",
+                  "title": "Store not found",
+                  "detail": "No store found for the specified store id. Please specify a valid store id and try again.",
+                }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalException"
+              example: 
+                {
+                  "status": 403,
+                  "type": "FORBIDDEN",
+                  "title": "Token expired.",
+                  "detail": "The specified access token has expired. Please try again with an active access token.",
+                  "tags":[]
+                }
+components:
+  schemas:
+    StoreOffers:
+      type: object
+      description: The details of various offers provided by a store.
+      properties:
+        storeId: 
+          type: string
+          description: The internal system identifier for the store.
+          example: eahdjk14129102==
+        genericOffers:
+          type: array
+          description: The list of offers run by a store that are available to all customers.
+          items:
+            $ref: '#/components/schemas/StoreOffer'
+        personalizedOffers:
+          type: array
+          description: The list of offers run by a store that are exclusive to the customer.
+          items:
+            $ref: '#/components/schemas/StoreOffer'
+    StoreOffer:
+      type: object
+      description: The details of an offer run by a store.
+      properties:
+        offerId: 
+          type: string
+          description: The internal system identifier for the offer.
+          example: h929d1
+        offerTitle:
+          type: string
+          description: The title for the offer being run by the store. 
+          example: Indigo Nation - Buy 2 Get 2 filtered.
+        startDate:
+          type: string
+          description: The offer start database.
+          example: "2022-05-17"
+        endDate:
+          type: string
+          description: The offer end database.
+          example: "2022-05-17"
+        offerBannerUrl: 
+          type: string
+          description: The URL to access the offer banner image.
+          example:  https://dev.proximety.io/images/21423.jpg
+    StoreSearchResponse:
+      type: object
+      description: The store search response that contains the list of stores matching the search criteria.
+      properties:
+        count: 
+          type: integer
+          description: The count of stores returned in the search response.
+          example: 10
+        total: 
+          type: integer
+          description: The total number of stores that match the specified search criteria.
+        _embedded:
+          type: object
+          description: The embedded search results
+          properties:
+            stores:
+              type: array
+              description: The list of stores matching the specified search criteria.
+              items:
+                $ref: '#/components/schemas/StoreSummary'
+    StoreSearchRequest:
+      type: object
+      description: The search filters based on which a list of stores are to be retrieved.
+      properties:
+        query: 
+          type: string
+          description: The search string based on which results need to be fetched.
+          example: adi
+        # mallId:
+        #   type: string
+        #   description: The internal system identifier for the shopping malls whose stores are to be retrieved.
+        #   example: 1d4122
+        storeCategories:
+          type: array
+          items:
+            type: string
+            description: The store category.
+            example: FOOTWEAR
+            enum: 
+            - FOOTWEAR
+            - APPARELS
+            - SUPERMARKET
+            - JEWELLERY
+          example: [FOOTWEAR, APPARELS]
+        sortBy:
+          type: string
+          description: The criteria based on which the results need to be supported.
+          example: DATE_LAUNCHED
+          enum:
+            - DATE_LAUNCHED
+            - POPULARITY
+        offset:
+          type: integer
+          description: The search offset for doing paginated search.
+          example: 20
+          default: 0
+        limit: 
+          type: integer
+          description: The page size for doing paginated search
+          example: 10
+          default: 10
+    StoreDetails:
+      type: object
+      description: The details of a shopping stores.
+      required:
+        - "name"
+        - "description"
+        - "ownerName"
+        # - "mallId"
+        - "phoneNumbers"
+        - "primaryEmail"
+        - "location"
+        - "storeTimings"
+      properties:
+        storeId: 
+          type: string
+          description: The internal system identifier for the store.
+          example: i9s392jdkahiu
+        name: 
+          type: string
+          description: The name of the store.
+          example: Allen Solly Junior
+        description: 
+          type: string
+          description: A description of the store.
+          example: Allen Solly Junior is a fashion brand that provides best in class fashion solutions.
+        ownerName: 
+          type: string
+          description: The name of the person who owns the store.
+          example: David James
+        # mallId:
+        #   type: string
+        #   description: The id of the shopping mall to which the store belongs.
+        #   example: ajdhus72194a
+        phoneNumbers:
+          description: A list of contact numbers associated with the store.
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        primaryEmail: 
+          type: string
+          description: The primary email id for the store.
+          example: abc@xyz.com
+        location:
+          type: object
+          description: The location of the store within a shopping mall.
+          $ref: "#/components/schemas/FloorDetails"
+        categories:
+          type: array 
+          example: [APPAREL,SHOES]
+          items:
+            type: string
+            description: The category to which the store belongs.
+            example: 
+            enum:
+              - APPAREL
+              - FASHION
+              - SHOES
+        storeSizeInSqFt:
+          type: integer
+          description: The size of the store in square feet.
+          example: 250
+        brandsAvailable:
+          type: string
+          description: A comma separated list of the brands available at the store.
+        brandLogo:
+          type: string
+          description: The URL to the brand logo image. 
+          example: https://dev.proximety.io/images/21423.jpg
+        storeImage:
+          type: string
+          description: The URL to the store display image.
+          example: https://dev.proximety.io/images/21423.jpg
+        storeTimings:
+          type: object
+          description: The store operation timing details.
+          $ref: '#/components/schemas/StoreTimings'
+        links:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Link'
+    Link: 
+      type: object
+      description: A link relationship.
+      properties:
+        rel:
+          type: string
+          example: self 
+        href:
+          type: string
+          description: The URL link to the resource.
+          example: http://dev.proximety.io/api/stores/abruishj293jjs
+    StoreSummary:
+      type: object
+      description: The details of a shopping stores.
+      properties:
+        storeId: 
+          type: string
+          description: The internal system identifier for the store.
+          example: i9s392jdkahiu
+        name: 
+          type: string
+          description: The name of the store.
+          example: Allen Solly Junior fashion solutions.
+        # mallId:
+        #   type: string
+        #   description: The id of the shopping mall to which the store belongs.
+        #   example: ajdhus72194a
+        location:
+          type: object
+          description: The location of the store within a shopping mall.
+          $ref: "#/components/schemas/FloorDetails"
+        categories:
+          type: array 
+          example: [APPAREL,SHOES]
+          items:
+            type: string
+            description: The category to which the store belongs.
+            example: 
+            enum:
+              - APPAREL
+              - FASHION
+              - SHOES
+        brandLogo:
+          type: string
+          description: The URL to the brand logo image. 
+          example: https://dev.proximety.io/images/21423.jpg
+        storeImage:
+          type: string
+          description: The URL to the store display image.
+          example: https://dev.proximety.io/images/21423.jpg
+        storeTimings:
+          type: object
+          description: The store operation timing details.
+          $ref: '#/components/schemas/StoreTimings'
+        links:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Link'
+    StoreTimings:
+      type: object
+      description: The store operation timings.
+      properties:
+        openingTime: 
+          type: string
+          description: The store opening time.
+          example: 10:00
+        closingTime:
+          type: string
+          description: The store closing time.
+          example: 21:00
+    FloorDetails:
+      type: object
+      description: The details of a floor in a shopping mall.
+      properties:
+        floorId: 
+          type: string
+          description: The internal system identifier for a floor.
+          example: aadjwinfinmkksk312
+        name: 
+          type: string
+          description: The name for the floor.
+          example: Ground floor     
+    PhoneNumber: 
+      type: object
+      properties:
+        countryCode:
+          type: string
+          description: The country code prefix for the phone number.
+          example: "+91"
+        phoneNumber: 
+          type: integer 
+          description: The 10-digit mobile number
+    GlobalException:
+      type: object
+      description: An exception thrown by the system.
+      properties:
+        status:
+          type: integer
+          description: The status code for the error.
+          example: 401
+        type:
+          type: string
+          description: The type name for the error being thrown.
+          example: UNAUTHORIZED
+        title:
+          type: string
+          description: The error title.
+          example: Token expired.
+        detail:
+          type: string
+          description: The details of the error being thrown.
+          example: The access token has expired for the user. Please generate a new token and try again.
+        tags:
+          type: array
+          description: The varios tags associated with the error that provides additional information about the error.
+          items: 
+            type: string
+            example: ACCESS_TOKEN_INVALID  

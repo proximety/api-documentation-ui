@@ -1,0 +1,410 @@
+openapi: '3.0.2'
+info:
+  title: Issue Tickets Service
+  version: '1.0'
+  license:
+    name: Proximety
+    url: www.proximety.io
+servers:
+  - url: https://dev.proximety.io/api
+  - url: https://staging.proximety.io/api
+  - url: https://www.proximety.io/api
+tags:
+- name: Issue Ticket
+  
+# - name: User
+# - name: Issue Ticket
+paths:
+  /issue-tickets:
+    post:
+      tags:
+        - Issue Ticket
+      summary: Create issue ticket
+      description: Crate a new issue ticket with the platform team for with the specified ticket details.
+      operationId: createTicket   
+      requestBody:
+        description: Details of the issue ticket that needs to be raised.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueTicket'
+            example: {
+                        "userId": "eejash12==",
+                        "userType": "CUSTOMER",
+                        "type": "PAYMENT",
+                        "description": "Order confirmation failed for order# 121 but th payment was processed. Please review and resolve.",
+                      }
+      responses:
+        203:
+          description: Created
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/IssueTicket'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GlobalException'
+              example: 
+                {
+                  "status": 403,
+                  "type": "BAD_REQUEST",
+                  "title": "Invalid ticket type",
+                  "detail": "The specified ticket type is invalid. Please specify a valid tikcet type and try again.",
+                  "tags":[]
+                }
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GlobalException'        
+              example: 
+                    {
+                      "status": 403,
+                      "type": "FORBIDDEN",
+                      "title": "Token expired.",
+                      "detail": "The specified access token has expired. Please try again with an active access token.",
+                      "tags":[]
+                    }
+  /issue-tickets/{ticketId}:
+    get:
+      tags:
+        - Issue Ticket
+      summary: Get issue ticket
+      description: Retrieves the details of the specifed issue ticket.
+      operationId: getTicketById
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/IssueTicket'
+        404: 
+          description: Not found
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GlobalException'
+              example: 
+                {
+                  "status": 403,
+                  "type": "NOT_FOUND",
+                  "title": "Issue ticket not found",
+                  "detail": "No issue ticket found for the specified ticket id.",
+                  "tags":[]
+                }
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GlobalException'        
+              example: 
+                    {
+                      "status": 403,
+                      "type": "FORBIDDEN",
+                      "title": "Token expired.",
+                      "detail": "The specified access token has expired. Please try again with an active access token.",
+                      "tags":[]
+                    }
+    patch:
+      tags:
+        - Issue Ticket
+      summary: Patch issue ticket
+      description: Updates the specified attributes of the issue ticket.
+      operationId: patchUpdateIssueTicket
+      requestBody:
+        description: Details of the attributes of the issue ticket that needs to be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/IssueTicket'
+                - type: object
+                  properties:
+                    Segment:
+                      nullable: true
+            example: {
+                        "status" : "CLOSED"
+                                  }                      
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/IssueTicket'
+        404: 
+          description: Not found
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GlobalException'
+              example: 
+                {
+                  "status": 403,
+                  "type": "NOT_FOUND",
+                  "title": "Issue ticket not found",
+                  "detail": "No issue ticket found for the specified ticket id.",
+                  "tags":[]
+                }
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GlobalException'        
+              example: 
+                    {
+                      "status": 403,
+                      "type": "FORBIDDEN",
+                      "title": "Token expired.",
+                      "detail": "The specified access token has expired. Please try again with an active access token.",
+                      "tags":[]
+                    }
+    put:
+      tags:
+        - Issue Ticket
+      summary: Update issue ticket
+      description: Updates the details of the specified issue ticket.
+      operationId: updateTicket
+      requestBody:
+        description: Details of the issue ticket that needs to be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueTicket'
+            example: {
+                        "userId": "eejash12==",
+                        "userType": "CUSTOMER",
+                        "type": "PAYMENT",
+                        "description": "Order confirmation failed for order# 121 but th payment was processed. Please review and resolve.",
+                      }
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/IssueTicket'
+        404: 
+          description: Not found
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GlobalException'
+              example: 
+                {
+                  "status": 403,
+                  "type": "NOT_FOUND",
+                  "title": "Issue ticket not found",
+                  "detail": "No issue ticket found for the specified ticket id.",
+                  "tags":[]
+                }
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GlobalException'        
+              example: 
+                    {
+                      "status": 403,
+                      "type": "FORBIDDEN",
+                      "title": "Token expired.",
+                      "detail": "The specified access token has expired. Please try again with an active access token.",
+                      "tags":[]
+                    }
+  /issue-tickets/_search:
+    post: 
+      tags:
+        - "Search"
+      summary: Search issue tickets
+      description: Retrieves a paginated list of issue tickets based on the specifed search criteria.
+      operationId: searchIssueTickets
+      parameters:
+        - name: Authorization
+          in: header
+          description: The authentication bearer token.
+          required: true
+          example: Bearer asd.js2jd9a.gC6paXtNOg0OZL4-adsd-asd
+          schema:
+            type: string
+      requestBody:
+        description: The search criteria and filters based on which a list of issue tickets are to be retrieved.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/IssueTicketSearchRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/IssueTicketSearchResponse'
+components:
+  schemas:
+    GlobalException:
+      type: object
+      description: An exception thrown by the system.
+      properties:
+        status:
+          type: integer
+          description: The status code for the error.
+          example: 401
+        type:
+          type: string
+          description: The type name for the error being thrown.
+          example: UNAUTHORIZED
+        title:
+          type: string
+          description: The error title.
+          example: Token expired.
+        detail:
+          type: string
+          description: The details of the error being thrown.
+          example: The access token has expired for the user. Please generate a new token and try again.
+        tags:
+          type: array
+          description: The varios tags associated with the error that provides additional information about the error.
+          items: 
+            type: string
+            example: ACCESS_TOKEN_INVALID  
+    IssueTicketSearchResponse:
+      type: object
+      description: The issue ticket search response that contains the list of issue tickets matching the search criteria.
+      properties:
+        count: 
+          type: integer
+          description: The count of issue tickets returned in the search response.
+          example: 10
+        total: 
+          type: integer
+          description: The total number of issue tickets that match the specified search criteria.
+          example: 100
+        _embedded:
+          type: object
+          description: The embedded search results
+          properties:
+            issueTickets:
+              type: array
+              description: The list of issue tickets matching the specified search criteria.
+              items:
+                $ref: '#/components/schemas/IssueTicket'
+    IssueTicketSearchRequest:
+      type: object
+      description: The search filters based on which a list of issue tickets are to be retrieved.
+      properties:
+        userIdFilter:
+          type: array
+          items:
+            type: string
+            description: The user id.
+            example: ahfh1233njhs
+        userTypeFilter:
+          type: array
+          items:
+            type: string
+            description: The user type.
+            example: CUSTOMER
+            enum: 
+            - CUSTOMER
+            - RESTAURANT
+          example: [RESTAURANT, CUSTOMER]
+        ticketStatusFilter:
+          type: array
+          items:
+            type: string
+            description: The ticket status.
+            example: OPEN
+            enum: 
+            - OPEN
+            - CLOSED
+          example: [OPEN, CLOSED]
+        issueTypeFilter:
+          type: array
+          items:
+            type: string
+            description: The issue type.
+            example: FOOTWEAR
+            enum: 
+            - PAYMENT
+            - OTHER
+          example: [PAYMENT, OTHER]
+        sortBy:
+          type: string
+          description: The criteria based on which the results need to be supported.
+          example: DATE_LAUNCHED
+          enum:
+            - DATE_LAUNCHED
+            - POPULARITY
+        offset:
+          type: integer
+          description: The search offset for doing paginated search.
+          example: 20
+          default: 0
+        limit: 
+          type: integer
+          description: The page size for doing paginated search
+          example: 10
+          default: 10 
+    IssueTicket: 
+        type: object
+        description: The details related to an issue ticket raised by a user.
+        required:
+          - userId
+          - userType
+          - type
+          - description
+        properties:
+          id:
+            type: integer
+            description: The internal system identifier for the issue ticket.
+            example: eejash12==
+          userId:
+            type: string
+            description: The internal system identifier for the user raising the ticket.
+            example: ad123j99dj
+          userType:
+            type: string
+            description: The type of user raising the issue ticket.
+            example: CUSTOMER 
+            enum:
+              - CUSTOMER
+              - RESTAURANT
+          type:
+            type: string
+            description: The issue type for the issue ticket raised by a user.
+            enum:
+              - PAYMENT
+              - OTHER
+          description:
+            type: string
+            description: The issue details specified by the user for the issue ticket.
+            example: Order confirmation failed for order# 121 but the payment was processed. Please review and resolve.
+          dateCreated:
+            type: string
+            pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+            example: "2022-05-17"
+          status:
+            type: string
+            description: The current status of the issue ticket.
+            enum:
+              - OPEN 
+              - ASSIGNED
+              - CLOSED
+          resolutionDetails:
+            type: string
+            description: The details regarding issue resolution provided by the proximety team.
+            example: The payment has been reversed and deposited back to your bank account.
