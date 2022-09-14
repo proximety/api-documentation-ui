@@ -46,9 +46,9 @@ const ServiceList = () => {
     if (selected) {
         return (
             <div className='rapidoc'>
-                <Select className='select_style' onChange={handleSelectChange}  options={services} defaultValue={{value: selected.value, label: selected.label}}>
+                <Select className='select_style' onChange={handleSelectChange} options={services} defaultValue={{value: selected.value, label: selected.label}}>
                 </Select>
-                <rapi-doc style={{ "height":"575px", "overflow":"scroll" }}
+                <rapi-doc
                     spec-url={selected.value}
                     theme="light"
                 ></rapi-doc>
