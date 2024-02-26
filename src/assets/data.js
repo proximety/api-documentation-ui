@@ -5,7 +5,7 @@ export const services = [{ id: 1, value: 'https://proximety.github.io/api-docume
 { id: 5, value: 'https://proximety.github.io/api-documentation/openapi/offers.yaml', label: 'Offer Service' },
 { id: 6, value: 'https://proximety.github.io/api-documentation/openapi/stores.yaml', label: 'Store Service' },
 { id: 7, value: 'https://proximety.github.io/api-documentation/openapi/food.yaml', label: 'Payment Service' },
-{ id: 7, value: 'https://proximety.github.io/api-documentation/openapi/rewards.yaml', label: 'Rewards Service' },
-{ id: 7, value: 'https://proximety.github.io/api-documentation/openapi/notification.yaml', label: 'Notification Service' },
-{ id: 7, value: 'https://proximety.github.io/api-documentation/openapi/payment.yaml', label: 'Food Service' },
-{ id: 7, value: 'https://proximety.github.io/api-documentation/openapi/advertisements.yaml', label: 'Advertisements Service' }];
+{ id: 8, value: 'https://proximety.github.io/api-documentation/openapi/rewards.yaml', label: 'Rewards Service' },
+{ id: 9, value: 'https://proximety.github.io/api-documentation/openapi/notification.yaml', label: 'Notification Service' },
+{ id: 10, value: 'https://proximety.github.io/api-documentation/openapi/payment.yaml', label: 'Food Service' },
+{ id: 11, value: 'https://proximety.github.io/api-documentation/openapi/advertisements.yaml', label: 'Advertisements Service' }];
